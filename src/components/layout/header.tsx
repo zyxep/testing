@@ -20,7 +20,7 @@ export default function Header() {
         <div className="hidden md:flex">
           <SearchInput />
         </div>
-        <UserNav logoutComponent={Logout} />
+        <UserNav logoutComponent={<Logout />} />
         <ThemeToggle />
       </div>
     </header>

@@ -22,7 +22,7 @@ export default async function DashboardLayout({
   return (
     <KBar>
       <SidebarProvider defaultOpen={defaultOpen}>
-        <AppSidebar logoutComponent={undefined} />
+        <AppSidebar logoutComponent={<Logout />} />
         <SidebarInset>
           <Header />
           {/* page main content */}

@@ -13,13 +13,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState, useTransition } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import * as z from 'zod'
 import GithubSignInButton from './github-auth-button'
 import { handleFlowError, LoginFlow, UpdateLoginFlowBody } from '@ory/client-fetch'
 import { HandleError, sdk } from '@/lib/sdk'
 import { HandleErrors } from '@/lib/sdk-error'
 import { ErrorToastSubscriber } from '@/components/error-handler-client'
+import { useSessionContextStore } from '@/client'
+import { useShallow } from 'zustand/react/shallow'
+import { useToast } from '@/hooks/use-toast'
 
 const formSchema = z.object({
   username: z.string(),
@@ -32,7 +34,9 @@ type UserFormValue = z.infer<typeof formSchema>;
 export default function UserAuthForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const setSession = useSessionContextStore(useShallow((state) => state.setSession))
   const [flow, setFlow] = useState<LoginFlow | null>(null)
+  const { toast } = useToast()
   //const [serverError, setServerError] = useState<string | undefined>()
   const returnTo = String(searchParams.get('return_to') || '')
   const flowId = String(searchParams.get('flow') || '')
@@ -100,20 +104,22 @@ export default function UserAuthForm() {
       password: data.password
     } as UpdateLoginFlowBody
 
-    startTransition(() => {
-      // we submit the flow to Ory with the form data
-      sdk
-        .updateLoginFlow({ flow: flow.id, updateLoginFlowBody: body })
-        .then(() => {
-          if (flow?.return_to) {
-            window.location.href = flow?.return_to
-            return
-          }
+    //startTransition(() => {
+    // we submit the flow to Ory with the form data
+    sdk
+      .updateLoginFlow({ flow: flow.id, updateLoginFlowBody: body })
+      .then((data) => {
+        console.log('data', data.session)
+        setSession(data.session)
+        if (flow?.return_to) {
+          window.location.href = flow?.return_to
+          return
+        }
 
-          toast.success('Signed In Successfully!')
-          router.push('/dashboard/overview')
-        }).catch(foo)
-    })
+        toast({ description: 'Signed In Successfully!' })
+        router.push('/dashboard/overview')
+      }).catch(foo)
+    //})
   }
 
   useEffect(() => {

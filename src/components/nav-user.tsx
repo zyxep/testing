@@ -22,7 +22,6 @@ import {
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar'
-import { Logout } from '@/components/logout'
 import { Suspense } from 'react'
 import * as React from 'react'
 

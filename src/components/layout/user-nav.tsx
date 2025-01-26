@@ -66,9 +66,7 @@ export function UserNav({ logoutComponent }: Props) {
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <Suspense>
-              {logoutComponent}
-            </Suspense>
+            {logoutComponent}
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>

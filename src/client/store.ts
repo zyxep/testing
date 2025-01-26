@@ -46,35 +46,36 @@ export const createSessionContextStore = (
   refetcher: () => Promise<Session | undefined | null>
 ) => {
   return createStore<SessionStore>()((set) => ({
-    ...initState,
-    initialized: !!initState,
-    isLoading: !!initState,
-    setSession: () =>
-      set((state: { session: Session | null | undefined }) => ({
-        session: state.session
-      })),
-    setProfile: () =>
-      set((state: { profile: ProfileData | null }) => ({
-        profile: state.profile
-      })),
-    setRefetch: async () => {
-      set(() => ({
-        isLoading: true,
-        error: undefined
-      }))
+      ...initState,
+      initialized: !!initState,
+      isLoading: !!initState,
+      setSession: () =>
+        set((state: { session: Session | null | undefined }) => ({
+          session: state.session
+        })),
+      setProfile: () =>
+        set((state: { profile: ProfileData | null }) => ({
+          profile: state.profile
+        })),
+      setRefetch: async () => {
+        set(() => ({
+          isLoading: true,
+          error: undefined
+        }))
 
-      try {
-        const session = await refetcher()
-        set(() => ({
-          isLoading: false,
-          session: session
-        }))
-      } catch (e) {
-        set(() => ({
-          isLoading: false,
-          error: e as Error
-        }))
+        try {
+          const session = await refetcher()
+          set(() => ({
+            isLoading: false,
+            session: session
+          }))
+        } catch (e) {
+          set(() => ({
+            isLoading: false,
+            error: e as Error
+          }))
+        }
       }
-    }
-  }))
+    })
+  )
 }

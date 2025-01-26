@@ -249,7 +249,6 @@ export async function getLogoutFlow({
                                       returnTo
                                     }: { returnTo?: string } = {}): Promise<LogoutFlow> {
   const cookie = await getCookieHeader()
-  console.log('logout flow....')
   return sdk.createBrowserLogoutFlow({
     cookie,
     returnTo

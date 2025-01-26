@@ -37,7 +37,7 @@ import {
   ChevronRight,
   ChevronsUpDown,
   CreditCard,
-  GalleryVerticalEnd
+  GalleryVerticalEnd, LogOut
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -212,9 +212,7 @@ export default function AppSidebar({ logoutComponent }: Props) {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Suspense>
-                    {logoutComponent}
-                  </Suspense>
+                  <LogOut /> {logoutComponent}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
